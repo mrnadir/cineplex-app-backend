@@ -79,6 +79,17 @@ export class TheaterService {
     return theaters;
   }
 
+  async getByIdFromDB(id: string) {
+    const theaterId = parseId(id, "theater id");
+
+    const theater = await this.theaterRepository.findById(theaterId);
+    if (!theater) {
+      throw new ApiError(StatusCodes.NOT_FOUND, "Theater not found");
+    }
+
+    return theater;
+  }
+
   async updateToDB(id: string, data: IUpdateTheater) {
     const theaterId = parseId(id, "theater id");
 

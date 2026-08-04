@@ -1,0 +1,336 @@
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-Ticket</title>
+
+    <style>
+      @page {
+        size: A4;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 794px;
+        height: 1123px;
+        margin: 0;
+        padding: 0;
+        background: #000;
+        overflow: hidden;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      @media print {
+        .overlay {
+          background-color: rgba(0, 0, 0, 0.5) !important;
+          backdrop-filter: none !important;
+          -webkit-backdrop-filter: none !important;
+        }
+        .card {
+          -webkit-mask-image: none !important;
+          mask-image: none !important;
+          clip-path: path(
+            "M 14 0 H 286 A 14 14 0 0 0 300 14 V 286 A 14 14 0 0 0 286 300 H 14 A 14 14 0 0 0 0 286 V 14 A 14 14 0 0 0 14 0 Z"
+          );
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div
+      style="
+        width: 794px;
+        height: 1123px;
+        margin: 0;
+        padding: 16px 16px 16px 16px;
+        box-sizing: border-box;
+        background: black;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        overflow: hidden;
+        "
+    >
+      <div style="width: 100%; max-width: 300px;">
+
+        <div
+          class="card"
+          style="
+                    position: relative;
+                    background-size: cover;
+                    background-position: center;
+                    height: 300px;
+                    color: white;
+                    display: flex;
+                    align-items: end;
+                    background-image: url('{{posterUrl}}');
+                "
+        >
+
+          <div
+            class="overlay"
+            style="
+                        height: 100%;
+                        width: 100%;
+                        display: flex;
+                        align-items: last baseline;
+                        padding: 16px;
+                    "
+          >
+            <div>
+              <div
+                style="
+                                background-color:#16a34a;
+                                color: white;
+                                width: fit-content;
+                                border-radius: 16px;
+                                padding: 4px 8px 4px 8px;
+                                font-size: 12px;
+                                font-weight: 700;
+                                letter-spacing: 0.01em;
+                            "
+              >
+                {{classType}}
+              </div>
+              <h1
+                style="
+                                color: white;
+                                font-size: 24px;
+                                font-weight: 700;
+                                letter-spacing: 1px;
+                                filter: drop-shadow(0 10px 8px rgba(0, 0, 0, 0.04)) drop-shadow(0 4px 3px rgba(0, 0, 0, 0.1));
+                            "
+              >
+                {{movieTitle}}
+              </h1>
+              <div style="color: white; font-size: 12px; font-weight: 700;">
+                {{language}}
+                -
+                {{format}}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+                    clip-path: path('M 14 0 H 286 A 14 14 0 0 0 300 14 V 259 A 14 14 0 0 0 286 273 H 14 A 14 14 0 0 0 0 259 V 14 A 14 14 0 0 0 14 0 Z');
+                    background-color: white;
+                "
+        >
+
+          <!-- Date & Time Row -->
+          <div
+            style="display: flex; align-items: center; justify-content: space-between; padding: 24px;"
+          >
+
+            <div>
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: 0.01em; margin-bottom:6px"
+              >
+                Date
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827;">
+                {{showDate}}
+              </div>
+            </div>
+
+            <div>
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: -0.01em; margin-bottom:6px"
+              >
+                Time
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827;">
+                {{showTime}}
+              </div>
+            </div>
+
+            <!-- Duration Row -->
+            <div>
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: -0.01em; margin-bottom:6px"
+              >
+                Duration
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827;">
+                {{duration}}
+              </div>
+            </div>
+
+          </div>
+
+          <div
+            style="padding: 24px; background-color: rgba(22, 163, 74, 0.1); display: flex; align-items: center; justify-content: space-between;"
+          >
+
+            <div>
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: -0.01em; margin-bottom:6px"
+              >
+                Seats
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: #111827;">
+                {{seatsLabel}}
+              </div>
+            </div>
+
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#16a34a"
+              opacity="0.4"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-party-popper-icon lucide-party-popper"
+            >
+              <path d="M5.8 11.3 2 22l10.7-3.79" />
+              <path d="M4 3h.01" />
+              <path d="M22 8h.01" />
+              <path d="M15 2h.01" />
+              <path d="M22 20h.01" />
+              <path
+                d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"
+              />
+              <path
+                d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17"
+              />
+              <path
+                d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"
+              />
+              <path
+                d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"
+              />
+            </svg>
+
+          </div>
+
+          <!-- Cinema & Location -->
+          <div style="padding: 24px;">
+
+            <div>
+              <div
+                style="font-size: 11px; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: -0.01em; margin-bottom:6px"
+              >
+                Cinema
+              </div>
+              <div
+                style="font-size: 16px; font-weight: 700; color: #111827; margin-bottom:6px"
+              >
+                {{cinemaName}}
+              </div>
+            </div>
+
+            <div style="font-size: 10px; color: #4b5563;">
+              {{cinemaAddress}}
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div
+        style="width: 100%; max-width: 300px;height: 573px; overflow: hidden;"
+      >
+
+        <div
+          style="
+                    position: relative;
+                    height: 300px;
+                    background-color: white;
+                    overflow: hidden;
+                    clip-path: path('M 14 0 H 286 A 14 14 0 0 0 300 14 V 286 A 14 14 0 0 0 286 300 H 14 A 14 14 0 0 0 0 286 V 14 A 14 14 0 0 0 14 0 Z');
+                "
+        >
+          <div
+            style="
+                        background-color: white;
+                        height: 100%;
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 1px solid #e5e7eb;
+                    "
+          >
+            <div style="background-color: white;">
+
+              <div
+                id="qrcode"
+                style="
+                  width: fit-content;
+                  background: white;
+                  padding: 10px;
+                  border-radius: 12px;
+                  border: 1px solid #e5e7eb;
+                "
+              >
+                <img src="{{qrDataURL}}" width="200" height="200" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+                    background-color: white;
+                    border-top: 1px dashed #6b7280;
+                    padding: 16px;
+                    overflow: hidden;
+                    clip-path: path('M 14 0 H 286 A 14 14 0 0 0 300 14 V 259 A 14 14 0 0 0 286 273 H 14 A 14 14 0 0 0 0 259 V 14 A 14 14 0 0 0 14 0 Z');
+                "
+        >
+          <div style="min-width: max-content;">
+            <p
+              style="font-size: 18px; color: black; text-align: center; margin: 0 0 20px 0; padding:0"
+            >
+              This seat plan help you to find
+              <br />
+              the seat where is exactly.
+            </p>
+
+            <ul
+              style="display: flex; flex-direction: column; gap: 2px; padding: 0; margin: 0;"
+            >
+              {{#each seatRows}}
+                <li style="display: flex; align-items: center; gap: 2px;">
+                  <span
+                    style="width: 16px; text-align: center; font-size: 9px; font-weight: 600; color: #444; flex-shrink: 0;"
+                  >{{this.row}}</span>
+                  <div style="display: flex; gap: 2px; align-items: center;">
+                    {{#each this.seats}}
+                      <div
+                        style="width: 11px; height: 11px; border-radius: 2px; background: {{this.bg}}; visibility: {{this.visibility}}; flex-shrink: 0;"
+                      ></div>
+                    {{/each}}
+                  </div>
+                </li>
+              {{/each}}
+            </ul>
+
+            <div
+              style="height:10px; width: 100%; background-color:#16a34a; border-radius: 4px; margin: 31px 0 10px 0"
+            >
+            </div>
+
+            <div
+              style="font-size: 11px; text-align: center; text-transform: uppercase; color: #6b7280; font-weight: 700; letter-spacing: -0.01em;"
+            >
+              THEATER SCREEN
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+</html>
