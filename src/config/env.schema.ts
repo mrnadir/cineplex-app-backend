@@ -47,6 +47,7 @@ const envSchema = z
     // redis config validator
     REDIS_HOST: z.string().default("localhost"),
     REDIS_PORT: z.coerce.number().default(6379),
+    REDIS_PASSWORD: z.string(),
 
     COOKIE_SAMESITE: z.enum(["strict", "lax", "none"]).default("lax"),
     COOKIE_SECURE: z

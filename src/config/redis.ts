@@ -5,7 +5,7 @@ import logger from "../shared/logger";
 const redisOptions: RedisOptions = {
   host: config.redis.host,
   port: config.redis.port,
-  // password: config.redis.port,
+  password: config.redis.password,
   maxRetriesPerRequest: 3,
   retryStrategy: (times: number) => {
     const delay = Math.min(times * 100, 3000);

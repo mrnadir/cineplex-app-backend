@@ -56,6 +56,7 @@ const config = {
   redis: {
     host: env.REDIS_HOST,
     port: env.REDIS_PORT,
+    password: env.REDIS_PASSWORD,
   },
   bullConnection: {
     host: env.REDIS_HOST,
