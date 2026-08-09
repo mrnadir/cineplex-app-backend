@@ -31,15 +31,15 @@ export class AuthController {
 
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
-      sameSite: config.cookie.samesite,
+      sameSite: config.cookie.samesite === "none" ? "none" : "lax",
       secure: config.cookie.secure,
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
     });
 
     res.cookie("csrfToken", result.csrfToken, {
-      httpOnly: true,
-      sameSite: config.cookie.samesite,
+      httpOnly: false,
+      sameSite: config.cookie.samesite === "none" ? "none" : "lax",
       secure: config.cookie.secure,
       path: "/",
       maxAge: 30 * 24 * 60 * 60 * 1000,
