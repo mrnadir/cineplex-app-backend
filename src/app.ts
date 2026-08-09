@@ -42,7 +42,13 @@ app.use(cookieParser());
 //file retrieve
 app.use(express.static("uploads"));
 app.use("/api/v1", router);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(generateOpenApiSpec()));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(generateOpenApiSpec(), {
+    swaggerOptions: { docExpansion: "none" },
+  })
+);
 
 const serverAdapter = new ExpressAdapter();
 serverAdapter.setBasePath("/admin/queues");
