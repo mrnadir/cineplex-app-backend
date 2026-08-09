@@ -171,7 +171,7 @@ CREATE TABLE
         theater_id BIGINT NOT NULL REFERENCES theaters (id) ON DELETE CASCADE,
         movie_id BIGINT NOT NULL REFERENCES movies (id) ON DELETE CASCADE,
         show_date DATE NOT NULL,
-        status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+        status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'deleted')),
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
         CONSTRAINT uq_shows_theater_movie_date UNIQUE (theater_id, movie_id, show_date)

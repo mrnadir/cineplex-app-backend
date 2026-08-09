@@ -21,13 +21,13 @@ dotenv.config();
 
 const app = express();
 
-// // project tech history forensics:
+// project tech history forensics:
 app.disable("x-powered-by");
 
-// // getting the real client IP behind a proxy (like Nginx or Cloudflare);
+// getting the real client IP behind a proxy (like Nginx or Cloudflare);
 app.set("trust proxy", 1);
 
-// // Use strong ETag headers for caching, which helps with client-side caching and reduces bandwidth usage.
+// Use strong ETag headers for caching, which helps with client-side caching and reduces bandwidth usage.
 app.set("etag", "strong");
 
 app.use(express.json());
