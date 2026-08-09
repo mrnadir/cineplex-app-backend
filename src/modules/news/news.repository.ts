@@ -46,13 +46,13 @@ export class NewsRepository {
   async updateById(id: number, payload: INewsUpdate): Promise<INews | null> {
     const result = await this.pool.query<INews>(
       `UPDATE news SET
-                title      = COALESCE($1, title),
-                news_image = COALESCE($2, news_image),
-                content    = COALESCE($3, content),
-                status     = COALESCE($4, status)
-             WHERE id = $5
-             RETURNING *
-            `,
+      title      = COALESCE($1, title),
+      news_image = COALESCE($2, news_image),
+      content    = COALESCE($3, content),
+      status     = COALESCE($4, status)
+      WHERE id = $5
+      RETURNING *
+      `,
       [
         payload.title ?? null,
         payload.news_image ?? null,

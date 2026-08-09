@@ -13,6 +13,6 @@ export type ICreateSlot = Omit<
   "id" | "is_active" | "created_at" | "updated_at"
 >;
 
-export type IUpdateSlot = Partial<ICreateSlot> & {
-  is_active?: "active" | "inactive";
-};
+export type IUpdateSlot = Partial<
+  Omit<ISlot, "id" | "admin_id" | "created_at" | "updated_at" | "show_id">
+>;

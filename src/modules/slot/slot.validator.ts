@@ -20,7 +20,13 @@ export class SlotValidator {
   // update slot = every create field optional + is_active toggle.
   updateSlotZodSchema = z.object({
     params: positiveIntIdSchema("Slot ID"),
-    body: SlotValidator.slotBody.partial().extend({
+    body: z.object({
+      slot_time: z
+        .string({ error: "Slot time is required" })
+        .trim()
+        .min(3, { error: "Slot time must be at least 3 characters" })
+        .max(6, { error: "Slot time must be at most 6 characters" })
+        .optional(),
       is_active: z
         .enum(["active", "inactive"], {
           error: 'is_active must be either "active" or "inactive"',

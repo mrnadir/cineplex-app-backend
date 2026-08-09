@@ -61,14 +61,12 @@ export class SlotRepository {
   async updateById(id: number, payload: IUpdateSlot): Promise<ISlot | null> {
     const result = await this.pool.query<ISlot>(
       `UPDATE slots SET
-      show_id = COALESCE($1, show_id),
-      slot_time   = COALESCE($2, slot_time)
+      slot_time   = COALESCE($1, slot_time),
+      is_active = COALESCE($2, is_active)
       WHERE id = $3
       RETURNING *
-      WHERE id = $4
-      RETURNING *
       `,
-      [payload.show_id ?? null, payload.slot_time ?? null, id]
+      [payload.slot_time ?? null, payload.is_active ?? null, id]
     );
     return result.rows[0] ?? null;
   }

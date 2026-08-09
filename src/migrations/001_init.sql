@@ -154,9 +154,42 @@ CREATE TABLE
         id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
         admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
         name VARCHAR(150) NOT NULL, -- "Star Cineplex Bashundhara"
-        code VARCHAR(20) NULL, -- short code, e.g. "SCB"
+        code VARCHAR(20) NULL UNIQUE, -- short code, e.g. "SCB"
         location TEXT NULL, -- address
         status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'deleted')),
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
-    )
+    );
+
+CREATE INDEX idx_theaters_status ON theaters (status, created_at DESC);
+
+-- SHOWS (movie + theater + date; slots belong to a show)
+CREATE TABLE
+    IF NOT EXISTS shows (
+        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+        theater_id BIGINT NOT NULL REFERENCES theaters (id) ON DELETE CASCADE,
+        movie_id BIGINT NOT NULL REFERENCES movies (id) ON DELETE CASCADE,
+        show_date DATE NOT NULL,
+        status VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        CONSTRAINT uq_shows_theater_movie_date UNIQUE (theater_id, movie_id, show_date)
+    );
+
+CREATE INDEX idx_shows_lookup ON shows (theater_id, movie_id, show_date, status);
+
+-- SLOTS (show times for a given show)
+CREATE TABLE
+    IF NOT EXISTS slots (
+        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+        show_id BIGINT NOT NULL REFERENCES shows (id) ON DELETE CASCADE,
+        slot_time VARCHAR(5) NOT NULL, -- "HH:MM",
+        is_active VARCHAR(20) NOT NULL DEFAULT 'active' CHECK (is_active IN ('active', 'inactive')),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        CONSTRAINT uq_slots_show_slot_time UNIQUE (show_id, slot_time)
+    );
+
+CREATE INDEX idx_slots_show_active ON slots (show_id, is_active);
