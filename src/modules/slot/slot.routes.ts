@@ -3,16 +3,21 @@ import { SlotValidator } from "./slot.validator";
 import { SlotController } from "./slot.controller";
 import { writeLimiter } from "../../middlewares/rate-limiter.middleware";
 import { defineRoute } from "../../shared/openapi/route-builder";
+import { AuthMiddleware } from "../../middlewares/authentication-middlware";
+import { USER_ROLES } from "../../enums";
+import { csrfProtection } from "../../middlewares/csrf-protection.middleware";
 
 export class SlotRoutes {
   public router: Router;
   private controller: SlotController;
   private validator: SlotValidator;
+  private authMiddleware: AuthMiddleware;
 
   constructor() {
     this.router = Router();
     this.controller = new SlotController();
     this.validator = new SlotValidator();
+    this.authMiddleware = new AuthMiddleware();
     this.initializeRoutes();
   }
 
@@ -27,7 +32,15 @@ export class SlotRoutes {
         description:
           "Creates a new slot for a show. Request body is validated against createSlotZodSchema and rate-limited.",
         schema: this.validator.createSlotZodSchema,
-        middlewares: [writeLimiter],
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.create,
       },
       "/slot"
@@ -43,6 +56,15 @@ export class SlotRoutes {
         description:
           "Fetches slot records for a specific show with admin-level filtering and pagination. Query params are validated against adminSlotsQuerySchema.",
         schema: this.validator.adminSlotsQuerySchema,
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.adminRetrieve,
       },
       "/slot"
@@ -73,7 +95,15 @@ export class SlotRoutes {
         description:
           "Updates a slot by id. The request body is partially validated and rate-limited.",
         schema: this.validator.updateSlotZodSchema,
-        middlewares: [writeLimiter],
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.update,
       },
       "/slot"
@@ -89,7 +119,15 @@ export class SlotRoutes {
         description:
           "Deletes a slot by id. The route parameter is validated against the slot id schema, and the action is rate-limited.",
         schema: this.validator.deleteSlotZodSchema,
-        middlewares: [writeLimiter],
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.delete,
       },
       "/slot"
