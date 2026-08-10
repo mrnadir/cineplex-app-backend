@@ -1,5 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS citext;
 
+CREATE EXTENSION IF NOT EXISTS btree_gist;
+
 -- user table
 CREATE TABLE
     IF NOT EXISTS users (
@@ -177,7 +179,7 @@ CREATE TABLE
         CONSTRAINT uq_shows_theater_movie_date UNIQUE (theater_id, movie_id, show_date)
     );
 
-CREATE INDEX idx_shows_lookup ON shows (theater_id, movie_id, show_date, status);
+CREATE INDEX idx_shows_lookup ON shows (theater_id, movie_id, show_date);
 
 -- SLOTS (show times for a given show)
 CREATE TABLE
@@ -193,3 +195,52 @@ CREATE TABLE
     );
 
 CREATE INDEX idx_slots_show_active ON slots (show_id, is_active);
+
+-- SEAT TYPES (for a given slot, theater, and show, there can be multiple seat types with different prices)
+CREATE TABLE
+    IF NOT EXISTS seat_types (
+        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+        type VARCHAR(20) NOT NULL DEFAULT 'Regular' CHECK (type IN ('Regular', 'VIP', 'Semi Recliner')), -- "Regular", "VIP", "Semi Recliner"
+        description TEXT NULL,
+        is_active boolean NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+    );
+
+CREATE TABLE
+    IF NOT EXISTS seat_pricings (
+        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+        slot_id BIGINT NOT NULL REFERENCES slots (id) ON DELETE CASCADE,
+        seat_type_id BIGINT NOT NULL REFERENCES seat_types (id) ON DELETE CASCADE,
+        price INTEGER NOT NULL DEFAULT 0 CHECK (price >= 0),
+        is_active boolean NOT NULL DEFAULT TRUE,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        CONSTRAINT uq_seat_pricings_slot_time_seat_type_price UNIQUE (slot_id, seat_type_id, price)
+    );
+
+-- BOOKINGS (one row per checkout; seat_labels holds all seats e.g. ARRAY['E6', 'E8'])
+-- A screening is uniquely identified by hall + movie + date + time; overlapping seats are blocked.
+CREATE TABLE
+    IF NOT EXISTS bookings (
+        id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+        user_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
+        slot_id BIGINT NOT NULL REFERENCES slots (id) ON DELETE CASCADE,
+        theater_id BIGINT NOT NULL REFERENCES theaters (id) ON DELETE CASCADE,
+        movie_id BIGINT NOT NULL REFERENCES movies (id) ON DELETE CASCADE,
+        show_date DATE NOT NULL,
+        slot_time VARCHAR(5) NOT NULL, -- "HH:MM"
+        booking_ref VARCHAR(40) NOT NULL UNIQUE, -- "BK-20260620-0042"
+        seat_labels TEXT[] NOT NULL CHECK (cardinality(seat_labels) > 0),
+        total_amount INTEGER NOT NULL CHECK (total_amount >= 0),
+        status VARCHAR(20) NOT NULL DEFAULT 'pending_payment' CHECK (
+            status IN ('pending_payment', 'confirmed', 'cancelled', 'expired')
+        ),
+        expires_at TIMESTAMPTZ NOT NULL,
+        paid_at TIMESTAMPTZ,
+        payment_ref VARCHAR(100),
+        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW ()
+    );
