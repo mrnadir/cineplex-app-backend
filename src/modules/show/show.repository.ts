@@ -54,7 +54,7 @@ export class ShowRepository {
       movie_id   = COALESCE($2, movie_id),
       show_date = COALESCE($3, show_date),
       status = COALESCE($4, status)
-      WHERE id = $4
+      WHERE id = $5
       RETURNING *
       `,
       [

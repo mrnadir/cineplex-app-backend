@@ -1,7 +1,7 @@
 import { StatusCodes } from "http-status-codes";
 import { ShowRepository } from "./show.repository";
 import { RedisHelper } from "../../shared/redis/redis.helper";
-import { ICreateShow, IShow } from "./show.interface";
+import { ICreateShow, IShow, IUpdateShow } from "./show.interface";
 import ApiError from "../../errors/ApiErrors";
 import { IPagination } from "../../types/pagination";
 
@@ -28,7 +28,7 @@ export class ShowService {
   }
 
   // Retrieve shows from the database with caching support
-  async retrievePublicShowsFromDB(query: Record<string, any>) {
+  async retrievePublicShowsFromDB(query: Partial<IShow>) {
     const cached = await this.redisHelper.hget<{
       shows: IShow[];
       pagination: IPagination;
@@ -44,7 +44,7 @@ export class ShowService {
   }
 
   // Admin retrieve shows from the database with caching support
-  async adminRetrieveShowsFromDB(query: Record<string, any>) {
+  async adminRetrieveShowsFromDB(query: Partial<IShow>) {
     const cached = await this.redisHelper.hget<{
       shows: IShow[];
       pagination: IPagination;
@@ -59,7 +59,7 @@ export class ShowService {
   }
 
   // update a show in the database by id
-  async updateShowInDB(id: string, data: any) {
+  async updateShowInDB(id: string, data: IUpdateShow) {
     const findingShow = await this.showRepository.findById(Number(id));
     if (!findingShow) {
       throw new ApiError(StatusCodes.NOT_FOUND, "Show not found");

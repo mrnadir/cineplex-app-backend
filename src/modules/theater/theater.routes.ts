@@ -72,6 +72,15 @@ export class TheaterRoutes {
         description:
           "Fetches all theaters, including inactive/hidden ones, for management purposes. Query params validated against adminTheatersQuerySchema.",
         schema: this.validator.adminTheatersQuerySchema,
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.adminRetrieve,
       },
       "/theater"
@@ -102,7 +111,16 @@ export class TheaterRoutes {
         description:
           "Updates an existing theater identified by `id`. Rate-limited. Request body validated against updateTheaterZodSchema.",
         schema: this.validator.updateTheaterZodSchema,
-        middlewares: [writeLimiter],
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
+
         handler: this.controller.update,
       },
       "/theater"
@@ -118,7 +136,15 @@ export class TheaterRoutes {
         description:
           "Permanently deletes a theater identified by `id`. Rate-limited. Params validated against theaterIdParamsSchema.",
         schema: this.validator.theaterIdParamsSchema,
-        middlewares: [writeLimiter],
+        middlewares: [
+          writeLimiter,
+          this.authMiddleware.authenticate,
+          this.authMiddleware.authorize(
+            USER_ROLES.SUPER_ADMIN,
+            USER_ROLES.ADMIN
+          ),
+          csrfProtection,
+        ],
         handler: this.controller.delete,
       },
       "/theater"

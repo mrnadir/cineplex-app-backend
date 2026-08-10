@@ -21,7 +21,7 @@ export interface IUser {
 
 // this is the interface for the user object that will be received from the client when creating a new user.
 export type ICreateUser = Omit<
-  IUser & { password: string },
+  IUser,
   | "id"
   | "password_hash"
   | "avatar"
