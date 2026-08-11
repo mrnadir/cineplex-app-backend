@@ -9,6 +9,7 @@ import TheaterRoutes from "../modules/theater/theater.routes";
 import SlotRoutes from "../modules/slot/slot.routes";
 import ShowRoutes from "../modules/show/show.routes";
 import SeatTypeRoutes from "../modules/seat_type/seat_type.routes";
+import SeatPricingRoutes from "../modules/seat_pricing/seat_pricing.routes";
 const router = express.Router();
 
 export const apiRoutes: Array<{ path: string; route: Router }> = [
@@ -22,6 +23,7 @@ export const apiRoutes: Array<{ path: string; route: Router }> = [
   { path: "/slot", route: SlotRoutes },
   { path: "/show", route: ShowRoutes },
   { path: "/seat_type", route: SeatTypeRoutes },
+  { path: "/seat_pricing", route: SeatPricingRoutes },
 ];
 
 apiRoutes.forEach((route) => router.use(route.path, route.route));
