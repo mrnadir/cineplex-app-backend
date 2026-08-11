@@ -201,7 +201,7 @@ CREATE TABLE
     IF NOT EXISTS seat_types (
         id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
         admin_id BIGINT NOT NULL REFERENCES users (id) ON DELETE CASCADE,
-        type VARCHAR(20) NOT NULL DEFAULT 'Regular' CHECK (type IN ('Regular', 'VIP', 'Semi Recliner')), -- "Regular", "VIP", "Semi Recliner"
+        name VARCHAR(20) NOT NULL DEFAULT 'Regular' CHECK (name IN ('Regular', 'VIP', 'Semi Recliner')), -- "Regular", "VIP", "Semi Recliner"
         description TEXT NULL,
         is_active boolean NOT NULL DEFAULT TRUE,
         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW (),

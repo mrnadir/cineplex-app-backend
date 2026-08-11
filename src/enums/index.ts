@@ -49,3 +49,9 @@ export enum MOVIE_CATEGORY {
   "2D" = "2D",
   "3D" = "3D",
 }
+
+export enum SEAT_TYPE_STATUS {
+  Regular = "Regular",
+  VIP = "VIP",
+  Semi_Recliner = "Semi Recliner",
+}

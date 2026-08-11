@@ -8,6 +8,7 @@ import MovieRoutes from "../modules/movie/movie.routes";
 import TheaterRoutes from "../modules/theater/theater.routes";
 import SlotRoutes from "../modules/slot/slot.routes";
 import ShowRoutes from "../modules/show/show.routes";
+import SeatTypeRoutes from "../modules/seat_type/seat_type.routes";
 const router = express.Router();
 
 export const apiRoutes: Array<{ path: string; route: Router }> = [
@@ -20,6 +21,7 @@ export const apiRoutes: Array<{ path: string; route: Router }> = [
   { path: "/theater", route: TheaterRoutes },
   { path: "/slot", route: SlotRoutes },
   { path: "/show", route: ShowRoutes },
+  { path: "/seat_type", route: SeatTypeRoutes },
 ];
 
 apiRoutes.forEach((route) => router.use(route.path, route.route));
