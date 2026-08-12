@@ -1,7 +1,6 @@
 import jwt, { SignOptions } from "jsonwebtoken";
 import crypto from "crypto";
 import { USER_ROLES } from "../enums";
-import { v4 as uuidv4 } from "uuid";
 import { RefreshTokenRepository } from "../modules/refresh_token/refresh_token.repository";
 import config from "../config";
 import { ICreateRefreshToken } from "../modules/refresh_token/refresh_token.interface";
@@ -42,7 +41,7 @@ export class TokenService {
     const options: SignOptions = {
       expiresIn: this.REFRESH_EXPIRES_DAYS as SignOptions["expiresIn"],
     };
-    const jti = uuidv4();
+    const jti = crypto.randomUUID();
 
     const days = parseInt(config.jwt.refreshExpiresDays, 10);
     const expired_at = new Date();

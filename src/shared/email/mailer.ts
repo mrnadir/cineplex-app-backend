@@ -16,7 +16,9 @@ const smtpConfig: SMTPTransport.Options = {
 
 export const transporter = nodemailer.createTransport(smtpConfig);
 
-transporter.verify((err) => {
-  if (err) logger.error({ err }, "SMTP connection failed:");
-  else logger.info("SMTP: connected and ready");
-});
+if (process.env.NODE_ENV !== "test") {
+  transporter.verify((err) => {
+    if (err) logger.error({ err }, "SMTP connection failed:");
+    else logger.info("SMTP: connected and ready");
+  });
+}

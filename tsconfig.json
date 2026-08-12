@@ -4,10 +4,7 @@
     "outDir": "./dist",
     "module": "commonjs",
     "target": "es2020",
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],

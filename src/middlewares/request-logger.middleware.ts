@@ -1,5 +1,5 @@
 import pinoHttp, { Options } from "pino-http";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 import { Request, Response } from "express";
 import logger from "../shared/logger";
 
@@ -8,7 +8,7 @@ const options: Options<Request, Response> = {
   genReqId: (req) => {
     const existing = req.headers["x-request-id"];
     if (typeof existing === "string" && existing.length) return existing;
-    return uuidv4();
+    return randomUUID();
   },
   customLogLevel: (_req, res, err) => {
     if (err || res.statusCode >= 500) return "error";

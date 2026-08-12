@@ -1,5 +1,4 @@
 import express, { Request, Response } from "express";
-import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
@@ -16,8 +15,6 @@ import { ExpressAdapter } from "@bull-board/express";
 import ErrorHandler from "./middlewares/error-handler.middleware";
 import { generateOpenApiSpec } from "./config/swagger";
 import swaggerUi from "swagger-ui-express";
-
-dotenv.config();
 
 const app = express();
 

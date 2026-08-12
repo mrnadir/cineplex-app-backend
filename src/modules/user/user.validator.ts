@@ -52,7 +52,6 @@ export class UserValidator {
 
   retrievedProfileZodSchema = z.object({
     params: positiveIntIdSchema("User ID"),
-    query: z.object({}).strict(),
   });
 
   changePasswordZodSchema = z.object({
